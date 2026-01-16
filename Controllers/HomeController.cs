@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using FinanceApp.Models;
+using FinanceApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceApp.Controllers

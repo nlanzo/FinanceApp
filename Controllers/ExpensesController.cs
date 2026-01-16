@@ -36,9 +36,9 @@ namespace FinanceApp.Controllers
             return View();
         }
         
-        public IActionResult GetChart()
+        public async Task<IActionResult> GetChart()
         {
-            var data = _expensesService.GetChartData();
+            var data = await _expensesService.GetChartData();
             return Json(data);
         }
 
@@ -62,6 +62,12 @@ namespace FinanceApp.Controllers
                 return RedirectToAction("Index");
             }
             return View(expense);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _expensesService.DeleteExpense(id);
+            return RedirectToAction("Index");
         }
     }
 }

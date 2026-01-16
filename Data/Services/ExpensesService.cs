@@ -1,4 +1,5 @@
 using FinanceApp.Models;
+using FinanceApp.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApp.Data.Services;
@@ -27,21 +28,33 @@ public class ExpensesService : IExpensesService
         return await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public IQueryable GetChartData()
+    public async Task<IEnumerable<ChartDataPoint>> GetChartData()
     {
-        var data = _context.Expenses
+        var data = await _context.Expenses
                             .GroupBy(e => e.Category)
-                            .Select(g => new 
+                            .Select(g => new ChartDataPoint
                             {
                                 Category = g.Key,
                                 Total = g.Sum(e => e.Amount)
-                            });
+                            })
+                            .ToListAsync();
         return data;
     }
 
     public async Task UpdateExpense(Expense expense)
     {
         _context.Expenses.Update(expense);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteExpense(int id)
+    {
+        var expense = await _context.Expenses.FindAsync(id);
+        if (expense == null)
+        {
+            return;
+        }
+        _context.Expenses.Remove(expense);
         await _context.SaveChangesAsync();
     }
 }
