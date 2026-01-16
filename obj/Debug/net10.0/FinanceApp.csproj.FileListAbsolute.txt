@@ -223,3 +223,4 @@
 /home/nlanz/workspace/github.com/nlanzo/FinanceApp/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 /home/nlanz/workspace/github.com/nlanzo/FinanceApp/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 /home/nlanz/workspace/github.com/nlanzo/FinanceApp/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+/home/nlanz/workspace/github.com/nlanzo/FinanceApp/bin/Debug/net10.0/appsettings.example.json

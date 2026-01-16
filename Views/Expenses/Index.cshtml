@@ -3,25 +3,55 @@
 <h2>My Expenses</h2>
 
 <div class="container">
-    <table class="table table-bordered">
-        <thead class="table-light">
-            <tr>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var expense in Model)
-            {
-                <tr>
-                    <td>@expense.Description</td>
-                    <td>$ @expense.Amount</td>
-                    <td>@expense.Category</td>
-                    <td>@expense.Date.ToString("yyyy-MM-dd")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var expense in Model)
+      {
+        <tr>
+          <td>@expense.Description</td>
+          <td>$@expense.Amount</td>
+          <td>@expense.Category</td>
+          <td>@expense.Date.ToString("yyyy-MM-dd")</td>
+          <td><a asp-action="Update" asp-route-id="@expense.Id" class="btn btn-primary">Update</a></td>
+          <td><a asp-action="Delete" asp-route-id="@expense.Id" class="btn btn-danger">Delete</a></td>
+        </tr>
+      }
+    </tbody>
+  </table>
 </div>
+
+<h2>Expenses Chart</h2>
+<div>
+  <canvas style="max-width: 450px; max-height: 450px;" id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  fetch('/Expenses/GetChart')
+    .then(response => response.json())
+    .then(data => {
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: data.map(d => d.category),
+          datasets: [{
+            data: data.map(d => d.total),
+          }]
+        },
+      });
+    })
+    .catch(error => console.error('Error:', error));
+</script>
