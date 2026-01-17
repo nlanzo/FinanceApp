@@ -18,10 +18,19 @@ public class ExpensesService : IExpensesService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Expense>> GetAllExpenses()
+    public async Task<IEnumerable<ExpenseReadViewModel>> GetAllExpenses()
     {
-        var expenses = await _context.Expenses.ToListAsync();
-        return expenses;
+        var query = _context.Expenses
+                                    .Select(e => new ExpenseReadViewModel{
+                                        Amount = e.Amount,
+                                        Date = e.Date,
+                                        Description = e.Description,
+                                        Id = e.Id
+                                    });
+        
+        var data = await query.ToListAsync();
+        
+        return data;
     }
 
     public async Task<Expense> GetExpenseById(int id)

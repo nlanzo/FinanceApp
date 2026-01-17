@@ -21,7 +21,7 @@ public class ExpensesController : Controller
 
     public IActionResult Create()
     {
-        var expenseViewModel = new ExpenseViewModel{
+        var expenseViewModel = new ExpenseEditViewModel{
             Id = null,
             Amount = 0,
             Category = "",
@@ -31,7 +31,7 @@ public class ExpensesController : Controller
         return View("Update", expenseViewModel);
     }
     [HttpPost]
-    public async Task<IActionResult> Create(ExpenseViewModel expense)
+    public async Task<IActionResult> Create(ExpenseEditViewModel expense)
     {
         if(ModelState.IsValid)
         {
@@ -63,7 +63,7 @@ public class ExpensesController : Controller
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Update(ExpenseViewModel expense)
+    public async Task<IActionResult> Update(ExpenseEditViewModel expense)
     {
         if (expense.Id == null){
             return NotFound();
@@ -83,12 +83,8 @@ public class ExpensesController : Controller
         return RedirectToAction("Index");
     }
 
-    public IActionResult CreateFormPartial()
-    {
-        return PartialView("_CreateForm");
-    }
 
-    public Expense ExpenseViewModelToExpense(ExpenseViewModel expenseViewModel)
+    public Expense ExpenseViewModelToExpense(ExpenseEditViewModel expenseViewModel)
     {
         if (expenseViewModel.Id == null || expenseViewModel.Id == 0)
         {
@@ -107,9 +103,9 @@ public class ExpensesController : Controller
         };
     }
 
-    public ExpenseViewModel ExpenseToExpenseViewModel(Expense expense)
+    public ExpenseEditViewModel ExpenseToExpenseViewModel(Expense expense)
     {
-        return new ExpenseViewModel{
+        return new ExpenseEditViewModel{
             Id = expense.Id,
             Amount = expense.Amount,
             Category = expense.Category ?? "",

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 namespace FinanceApp.ViewModels;
-public class ExpenseViewModel
+public class ExpenseEditViewModel
 {
     public int? Id { set; get; }
     [Required]

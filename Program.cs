@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews(); // For MVC Controllers
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation(); // For Razor Pages
+builder.Services.AddHttpClient<ICarService, CarService>(c => 
+{
+    c.BaseAddress = new Uri(builder.Configuration["CarApi:BaseURL"]);
+});
 
 builder.Services.AddDbContext<FinanceAppContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -6,7 +6,7 @@ namespace FinanceApp.Data.Services;
 
 public interface IExpensesService
 {
-    Task<IEnumerable<Expense>> GetAllExpenses();
+    Task<IEnumerable<ExpenseReadViewModel>> GetAllExpenses();
     Task<Expense> GetExpenseById(int id);
     Task AddExpense(Expense expense);
     Task<IEnumerable<ChartDataPoint>> GetChartData(CancellationToken cancellationToken);

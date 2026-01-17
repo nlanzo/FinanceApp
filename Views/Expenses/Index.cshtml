@@ -1,4 +1,4 @@
-@model IEnumerable<FinanceApp.Models.Expense>
+@model IEnumerable<FinanceApp.ViewModels.ExpenseReadViewModel>
 
 <h2>My Expenses</h2>
 <a style="margin-bottom: 20px;" asp-action="Create" class="btn btn-primary">Add Expense</a>
@@ -9,7 +9,6 @@
       <tr>
         <th>Description</th>
         <th>Amount</th>
-        <th>Category</th>
         <th>Date</th>
         <th>Update</th>
         <th>Delete</th>
@@ -21,7 +20,6 @@
         <tr>
           <td>@expense.Description</td>
           <td>$@expense.Amount</td>
-          <td>@expense.Category</td>
           <td>@expense.Date.ToString("yyyy-MM-dd")</td>
           <td><a asp-action="Update" asp-route-id="@expense.Id" class="btn btn-primary">Update</a></td>
           <td><a asp-action="Delete" asp-route-id="@expense.Id" class="btn btn-danger">Delete</a></td>
