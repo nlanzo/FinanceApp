@@ -1,6 +1,7 @@
 using FinanceApp.Models;
 using FinanceApp.DTOs;
 using Microsoft.EntityFrameworkCore;
+using FinanceApp.ViewModels;
 
 namespace FinanceApp.Data.Services;
 
@@ -23,9 +24,20 @@ public class ExpensesService : IExpensesService
         return expenses;
     }
 
-    public async Task<Expense?> GetExpenseById(int id)
+    public async Task<ExpenseViewModel?> GetExpenseById(int id)
     {
-        return await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id);
+        Expense? expenseModel = await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id);
+        if (expenseModel == null)
+        {
+            return null;
+        }
+        return new ExpenseViewModel{
+            Id = expenseModel.Id,
+            Amount = expenseModel.Amount,
+            Category = expenseModel.Category ?? "",
+            Date = expenseModel.Date,
+            Description = expenseModel.Description ?? ""
+        };
     }
 
     public async Task<IEnumerable<ChartDataPoint>> GetChartData(CancellationToken cancellationToken)
@@ -34,7 +46,7 @@ public class ExpensesService : IExpensesService
                             .GroupBy(e => e.Category)
                             .Select(g => new ChartDataPoint
                             {
-                                Category = g.Key,
+                                Category = g.Key ?? "Uncategorized",
                                 Total = g.Sum(e => e.Amount)
                             })
                             .ToListAsync(cancellationToken);

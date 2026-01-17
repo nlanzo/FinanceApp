@@ -21,9 +21,14 @@ public class ExpensesController : Controller
 
     public IActionResult Create()
     {
-        ViewData["Title"] = "Create Expense";
-        ViewData["Action"] = "Create";
-        return View("Update");
+        var expenseViewModel = new ExpenseViewModel{
+            Id = null,
+            Amount = 0,
+            Category = "",
+            Date = DateTime.Now,
+            Description = ""
+        };
+        return View("Update", expenseViewModel);
     }
     [HttpPost]
     public async Task<IActionResult> Create(ExpenseViewModel expense)
@@ -40,8 +45,6 @@ public class ExpensesController : Controller
 
             return RedirectToAction("Index");
         }
-        ViewData["Title"] = "Create Expense";
-        ViewData["Action"] = "Create";
         return View("Update");
     }
     
@@ -53,14 +56,19 @@ public class ExpensesController : Controller
 
     public async Task<IActionResult> Update(int id)
     {
-        ViewData["Title"] = "Update Expense";
-        ViewData["Action"] = "Update";
         var expense = await _expensesService.GetExpenseById(id);
-        if (expense == null)
+        var expenseViewModel = new ExpenseViewModel{
+            Id = expense?.Id ?? null,
+            Amount = expense?.Amount ?? 0,
+            Category = expense?.Category ?? "",
+            Date = expense?.Date ?? DateTime.Now,
+            Description = expense?.Description ?? ""
+        };
+        if (expense == null || expenseViewModel == null || expenseViewModel.Id == null)
         {
             return NotFound();
         }
-        return View(expense);
+        return View(expenseViewModel);
     }
     
     [HttpPost]
@@ -82,8 +90,6 @@ public class ExpensesController : Controller
             await _expensesService.UpdateExpense(_expense);
             return RedirectToAction("Index");
         }
-        ViewData["Title"] = "Update Expense";
-        ViewData["Action"] = "Update";
         return View(expense);
     }
 

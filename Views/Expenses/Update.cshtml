@@ -2,15 +2,21 @@
 
 @{
     var updating = Model.Id != null ? true : false;
+    string action = updating == true ? "Update" : "Create";
 }
 
+
+
 <div class="container">
-    <h2>@ViewData["Title"]</h2>
-    <form asp-action="@ViewData["Action"]" method="post">
+
+    <h2>@action Expense</h2>
+
+    <form asp-action="@action" method="post">
         @if (updating)
         {
             <input type="hidden" asp-for="Id" />
         }
+
         <div class="mb-3">
             <label asp-for="Description" class="form-label">Description</label>
             <input asp-for="Description" class="form-control" />
@@ -26,6 +32,7 @@
             <input asp-for="Category" class="form-control" />
             <span asp-validation-for="Category" class="text-danger"></span>
         </div>
+
         @if (updating)
         {
             <div class="mb-3">
@@ -34,7 +41,9 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         }
-        <button type="submit" class="btn btn-primary">@ViewData["Action"]</button>
+        <button type="submit" class="btn btn-primary">@action</button>
+
+
         <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
