@@ -56,15 +56,8 @@ public class ExpensesController : Controller
 
     public async Task<IActionResult> Update(int id)
     {
-        var expense = await _expensesService.GetExpenseById(id);
-        var expenseViewModel = new ExpenseViewModel{
-            Id = expense?.Id ?? null,
-            Amount = expense?.Amount ?? 0,
-            Category = expense?.Category ?? "",
-            Date = expense?.Date ?? DateTime.Now,
-            Description = expense?.Description ?? ""
-        };
-        if (expense == null || expenseViewModel == null || expenseViewModel.Id == null)
+        var expenseViewModel = await _expensesService.GetExpenseById(id);
+        if (expenseViewModel == null)
         {
             return NotFound();
         }
