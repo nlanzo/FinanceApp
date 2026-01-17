@@ -24,19 +24,14 @@ public class ExpensesService : IExpensesService
         return expenses;
     }
 
-    public async Task<ExpenseViewModel?> GetExpenseById(int id)
+    public async Task<Expense> GetExpenseById(int id)
     {
-        Expense? expenseModel = await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id);
-        if (expenseModel == null)
-        {
-            return null;
-        }
-        return new ExpenseViewModel{
-            Id = expenseModel.Id,
-            Amount = expenseModel.Amount,
-            Category = expenseModel.Category ?? "",
-            Date = expenseModel.Date,
-            Description = expenseModel.Description ?? ""
+        return await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id) ?? new Expense{
+            Id = 0,
+            Amount = 0,
+            Category = null,
+            Date = DateTime.UtcNow,
+            Description = ""
         };
     }
 

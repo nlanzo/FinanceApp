@@ -35,11 +35,7 @@ public class ExpensesController : Controller
     {
         if(ModelState.IsValid)
         {
-            var _expense = new Expense{
-                Amount = expense.Amount,
-                Category = expense.Category,
-                Description = expense.Description
-            };
+            var _expense = ExpenseViewModelToExpense(expense);
 
             await _expensesService.AddExpense(_expense);
 
@@ -56,8 +52,9 @@ public class ExpensesController : Controller
 
     public async Task<IActionResult> Update(int id)
     {
-        var expenseViewModel = await _expensesService.GetExpenseById(id);
-        if (expenseViewModel == null)
+        var expense = await _expensesService.GetExpenseById(id);
+        var expenseViewModel = ExpenseToExpenseViewModel(expense);
+        if (expense.Id == 0)
         {
             return NotFound();
         }
@@ -73,13 +70,7 @@ public class ExpensesController : Controller
         }
         if(ModelState.IsValid)
         {
-            var _expense = new Expense{
-                Id = expense.Id.Value,
-                Amount = expense.Amount,
-                Category = expense.Category,
-                Date = expense.Date,
-                Description = expense.Description
-            };
+            var _expense = ExpenseViewModelToExpense(expense);
             await _expensesService.UpdateExpense(_expense);
             return RedirectToAction("Index");
         }
@@ -95,5 +86,35 @@ public class ExpensesController : Controller
     public IActionResult CreateFormPartial()
     {
         return PartialView("_CreateForm");
+    }
+
+    public Expense ExpenseViewModelToExpense(ExpenseViewModel expenseViewModel)
+    {
+        if (expenseViewModel.Id == null || expenseViewModel.Id == 0)
+        {
+            return new Expense{
+                Amount = expenseViewModel.Amount,
+                Category = expenseViewModel.Category ?? "",
+                Description = expenseViewModel.Description ?? ""
+            };
+        }
+        return new Expense{
+            Id = expenseViewModel.Id.Value,
+            Amount = expenseViewModel.Amount,
+            Category = expenseViewModel.Category,
+            Date = expenseViewModel.Date,
+            Description = expenseViewModel.Description ?? ""
+        };
+    }
+
+    public ExpenseViewModel ExpenseToExpenseViewModel(Expense expense)
+    {
+        return new ExpenseViewModel{
+            Id = expense.Id,
+            Amount = expense.Amount,
+            Category = expense.Category ?? "",
+            Date = expense.Date,
+            Description = expense.Description ?? ""
+        };
     }
 }
