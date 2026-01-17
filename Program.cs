@@ -6,7 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(); // For MVC Controllers
-builder.Services.AddRazorPages(); // For Razor Pages
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation(); // For Razor Pages
+
 builder.Services.AddDbContext<FinanceAppContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IExpensesService, ExpensesService>();

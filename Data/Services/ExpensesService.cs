@@ -28,7 +28,7 @@ public class ExpensesService : IExpensesService
         return await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<IEnumerable<ChartDataPoint>> GetChartData()
+    public async Task<IEnumerable<ChartDataPoint>> GetChartData(CancellationToken cancellationToken)
     {
         var data = await _context.Expenses
                             .GroupBy(e => e.Category)
@@ -37,7 +37,7 @@ public class ExpensesService : IExpensesService
                                 Category = g.Key,
                                 Total = g.Sum(e => e.Amount)
                             })
-                            .ToListAsync();
+                            .ToListAsync(cancellationToken);
         return data;
     }
 
