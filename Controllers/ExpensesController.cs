@@ -1,8 +1,7 @@
-using FinanceApp.Data;
 using FinanceApp.Data.Services;
 using FinanceApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using FinanceApp.ViewModels;
 
 namespace FinanceApp.Controllers;
 
@@ -27,11 +26,17 @@ public class ExpensesController : Controller
         return View("Update");
     }
     [HttpPost]
-    public async Task<IActionResult> Create(Expense expense)
+    public async Task<IActionResult> Create(ExpenseViewModel expense)
     {
         if(ModelState.IsValid)
         {
-            await _expensesService.AddExpense(expense);
+            var _expense = new Expense{
+                Amount = expense.Amount,
+                Category = expense.Category,
+                Description = expense.Description
+            };
+
+            await _expensesService.AddExpense(_expense);
 
             return RedirectToAction("Index");
         }
@@ -60,11 +65,21 @@ public class ExpensesController : Controller
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Update(Expense expense)
+    public async Task<IActionResult> Update(ExpenseViewModel expense)
     {
+        if (expense.Id == null){
+            return NotFound();
+        }
         if(ModelState.IsValid)
         {
-            await _expensesService.UpdateExpense(expense);
+            var _expense = new Expense{
+                Id = expense.Id.Value,
+                Amount = expense.Amount,
+                Category = expense.Category,
+                Date = expense.Date,
+                Description = expense.Description
+            };
+            await _expensesService.UpdateExpense(_expense);
             return RedirectToAction("Index");
         }
         ViewData["Title"] = "Update Expense";
