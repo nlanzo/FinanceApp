@@ -35,7 +35,9 @@ public class ExpensesController : Controller
 
             return RedirectToAction("Index");
         }
-        return View();
+        ViewData["Title"] = "Create Expense";
+        ViewData["Action"] = "Create";
+        return View("Update");
     }
     
     public async Task<IActionResult> GetChart(CancellationToken cancellationToken)
@@ -65,6 +67,8 @@ public class ExpensesController : Controller
             await _expensesService.UpdateExpense(expense);
             return RedirectToAction("Index");
         }
+        ViewData["Title"] = "Update Expense";
+        ViewData["Action"] = "Update";
         return View(expense);
     }
 
