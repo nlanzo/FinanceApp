@@ -1,4 +1,5 @@
 namespace FinanceApp.Models;
+
 public class Expense
 {
     public int Id { set; get; }

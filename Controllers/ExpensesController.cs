@@ -1,13 +1,14 @@
 using FinanceApp.Data.Services;
 using FinanceApp.Models;
-using Microsoft.AspNetCore.Mvc;
 using FinanceApp.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceApp.Controllers;
 
 public class ExpensesController : Controller
 {
     private readonly IExpensesService _expensesService;
+
     public ExpensesController(IExpensesService expensesService)
     {
         _expensesService = expensesService;
@@ -21,19 +22,21 @@ public class ExpensesController : Controller
 
     public IActionResult Create()
     {
-        var expenseViewModel = new ExpenseEditViewModel{
+        var expenseViewModel = new ExpenseEditViewModel
+        {
             Id = null,
             Amount = 0,
             Category = "",
             Date = DateTime.Now,
-            Description = ""
+            Description = "",
         };
         return View("Update", expenseViewModel);
     }
+
     [HttpPost]
     public async Task<IActionResult> Create(ExpenseEditViewModel expense)
     {
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var _expense = ExpenseViewModelToExpense(expense);
 
@@ -43,7 +46,7 @@ public class ExpensesController : Controller
         }
         return View("Update");
     }
-    
+
     public async Task<IActionResult> GetChart(CancellationToken cancellationToken)
     {
         var data = await _expensesService.GetChartData(cancellationToken);
@@ -60,15 +63,16 @@ public class ExpensesController : Controller
         }
         return View(expenseViewModel);
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update(ExpenseEditViewModel expense)
     {
-        if (expense.Id == null){
+        if (expense.Id == null)
+        {
             return NotFound();
         }
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var _expense = ExpenseViewModelToExpense(expense);
             await _expensesService.UpdateExpense(_expense);
@@ -83,34 +87,36 @@ public class ExpensesController : Controller
         return RedirectToAction("Index");
     }
 
-
     public Expense ExpenseViewModelToExpense(ExpenseEditViewModel expenseViewModel)
     {
         if (expenseViewModel.Id == null || expenseViewModel.Id == 0)
         {
-            return new Expense{
+            return new Expense
+            {
                 Amount = expenseViewModel.Amount,
                 Category = expenseViewModel.Category ?? "",
-                Description = expenseViewModel.Description ?? ""
+                Description = expenseViewModel.Description ?? "",
             };
         }
-        return new Expense{
+        return new Expense
+        {
             Id = expenseViewModel.Id.Value,
             Amount = expenseViewModel.Amount,
             Category = expenseViewModel.Category,
             Date = expenseViewModel.Date,
-            Description = expenseViewModel.Description ?? ""
+            Description = expenseViewModel.Description ?? "",
         };
     }
 
     public ExpenseEditViewModel ExpenseToExpenseViewModel(Expense expense)
     {
-        return new ExpenseEditViewModel{
+        return new ExpenseEditViewModel
+        {
             Id = expense.Id,
             Amount = expense.Amount,
             Category = expense.Category ?? "",
             Date = expense.Date,
-            Description = expense.Description ?? ""
+            Description = expense.Description ?? "",
         };
     }
 }
