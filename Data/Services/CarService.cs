@@ -6,9 +6,12 @@ namespace FinanceApp.Data.Services;
 public class CarService : ICarService
 {
     private readonly HttpClient _httpClient;
-    public CarService(HttpClient httpClient)
+    private readonly ILogger<CarService> _logger;
+    
+    public CarService(HttpClient httpClient, ILogger<CarService> logger)
     {
         _httpClient = httpClient;
+        _logger = logger;
     }
     public async Task<List<CarDto>?> GetCars()
     {
@@ -28,10 +31,9 @@ public class CarService : ICarService
                            }).ToList();
         }
         catch (Exception ex)
-        // If something goes wrong I'm sending users to a generic error page
-        // logging to console for now but would normally use csharp logger
         {
-            Console.WriteLine(ex.Message);
+            // If something goes wrong I'm sending users to a generic error page
+            _logger.LogError(ex, "Error occurred while fetching cars from NHTSA API");
             return null;
         }
     }
