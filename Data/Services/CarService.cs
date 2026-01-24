@@ -5,19 +5,20 @@ namespace FinanceApp.Data.Services;
 
 public class CarService : ICarService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<CarService> _logger;
     
-    public CarService(HttpClient httpClient, ILogger<CarService> logger)
+    public CarService(IHttpClientFactory httpClientFactory, ILogger<CarService> logger)
     {
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
-    public async Task<List<CarDto>?> GetCars()
+    public async Task<List<CarDto>?> GetCarsAsync()
     {
         try
         {
-            var response = await _httpClient.GetFromJsonAsync<NhtsaResponse>("vehicles/GetMakesForVehicleType/car?format=json");
+            var httpClient = _httpClientFactory.CreateClient("CarApi");
+            var response = await httpClient.GetFromJsonAsync<NhtsaResponse>("vehicles/GetMakesForVehicleType/car?format=json");
             if (response?.Results == null)
             {
                 return null;

@@ -7,5 +7,5 @@ public interface ICarService
     /// <summary>
     /// Get the list of car makes from Nhtsa
     /// </summary>
-    Task<List<CarDto>?> GetCars();
+    Task<List<CarDto>?> GetCarsAsync();
 }

@@ -14,7 +14,7 @@ public class CarsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var cars = await _carService.GetCars();
+        var cars = await _carService.GetCarsAsync();
         if (cars == null)
         {
             return View("OutsideServiceError");
