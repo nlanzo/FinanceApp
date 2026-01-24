@@ -13,12 +13,12 @@ public class CarService : ICarService
         _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
-    public async Task<List<CarDto>?> GetCarsAsync()
+    public async Task<List<CarDto>?> GetCarsAsync(CancellationToken cancellationToken)
     {
         try
         {
             var httpClient = _httpClientFactory.CreateClient("CarApi");
-            var response = await httpClient.GetFromJsonAsync<NhtsaResponse>("vehicles/GetMakesForVehicleType/car?format=json");
+            var response = await httpClient.GetFromJsonAsync<NhtsaResponse>("vehicles/GetMakesForVehicleType/car?format=json", cancellationToken);
             if (response?.Results == null)
             {
                 return null;

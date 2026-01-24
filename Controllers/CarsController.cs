@@ -12,9 +12,9 @@ public class CarsController : Controller
         _carService = carService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var cars = await _carService.GetCarsAsync();
+        var cars = await _carService.GetCarsAsync(cancellationToken);
         if (cars == null)
         {
             return View("OutsideServiceError");
