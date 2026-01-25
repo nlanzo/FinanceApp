@@ -15,5 +15,5 @@ public class ExpenseEditViewModel
 
     [Required]
     public string Category { set; get; } = null!;
-    public DateTime Date { set; get; } = DateTime.Now;
+    public DateTime Date { set; get; } = DateTime.UtcNow;
 }
